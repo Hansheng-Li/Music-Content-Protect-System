@@ -1,6 +1,6 @@
 
 # PostgreSQL 创建表和插入数据指南
-
+[Link](https://www.runoob.com/postgresql/postgresql-data-type.html)
 
 ## 创建表格
 
