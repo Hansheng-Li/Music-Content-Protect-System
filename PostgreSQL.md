@@ -105,6 +105,58 @@ ON CONFLICT (user_id)
 DO UPDATE SET name = EXCLUDED.name, email = EXCLUDED.email;
 ```
 
+
+# psycopg2 数据插入方法总结
+
+在使用 `psycopg2` 这个 PostgreSQL 数据库适配器进行数据插入时，有多种方法可以实现参数的传递和数据的插入。
+
+## 使用 `%s` 作为占位符
+
+最常见的方法是使用 `%s` 作为参数占位符。
+
+```python
+cur.execute("INSERT INTO users (name, email, age) VALUES (%s, %s, %s)", ("Alice", "alice@example.com", 30))
+```
+
+## 使用命名参数
+
+通过使用命名的方式来插入数据，让代码更加清晰易懂。
+
+```python
+sql = "INSERT INTO users (name, email, age) VALUES (%(name)s, %(email)s, %(age)s)"
+data = {"name": "Alice", "email": "alice@example.com", "age": 30}
+cur.execute(sql, data)
+```
+
+## 使用 `executemany` 方法批量插入
+
+当有多条数据需要插入时，可以使用 `executemany` 方法。
+
+```python
+sql = "INSERT INTO users (name, email, age) VALUES (%s, %s, %s)"
+data = [("Alice", "alice@example.com", 30),
+        ("Bob", "bob@example.com", 25)]
+cur.executemany(sql, data)
+```
+
+## 使用 `psycopg2.sql` 模块构建动态 SQL
+
+为了更灵活地构建 SQL 语句，可以使用 `psycopg2.sql` 模块。
+
+```python
+from psycopg2 import sql
+
+sql_query = sql.SQL("INSERT INTO users (name, email, age) VALUES ({}, {}, {})").format(
+    sql.Literal("Alice"),
+    sql.Literal("alice@example.com"),
+    sql.Literal(30)
+)
+cur.execute(sql_query)
+```
+
+这些方法各有优势，可以根据实际情况和个人偏好来选择。
+
+
 # PostgreSQL JSON 处理指南
 
 PostgreSQL 的 JSON 支持使得我们可以在数据库中直接存储、查询和处理 JSON 格式的数据。这对于需要处理复杂数据结构的应用来说极其有用。以下是一些关于如何在 PostgreSQL 中操作 JSON 数据的基本示例。
