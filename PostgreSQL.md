@@ -104,3 +104,80 @@ INSERT INTO users (user_id, name, email) VALUES
 ON CONFLICT (user_id) 
 DO UPDATE SET name = EXCLUDED.name, email = EXCLUDED.email;
 ```
+
+# PostgreSQL JSON 处理指南
+
+PostgreSQL 的 JSON 支持使得我们可以在数据库中直接存储、查询和处理 JSON 格式的数据。这对于需要处理复杂数据结构的应用来说极其有用。以下是一些关于如何在 PostgreSQL 中操作 JSON 数据的基本示例。
+
+## 准备工作
+
+首先，我们需要创建一个包含 JSON 数据的表。例如，我们创建一个名为 `user_profiles` 的表，它包含 `id` 和 `profile` 两个字段。
+
+```sql
+CREATE TABLE user_profiles (
+    id SERIAL PRIMARY KEY,
+    profile JSON NOT NULL
+);
+```
+
+## 插入 JSON 数据
+
+向 `user_profiles` 表中插入包含 JSON 数据的记录的示例。
+
+```sql
+INSERT INTO user_profiles (profile)
+VALUES
+  ('{"name": "张三", "age": 28, "interests": ["游泳", "阅读"]}'),
+  ('{"name": "李四", "age": 32, "interests": ["跑步", "音乐"], "address": {"city": "北京", "street": "长安街"}}');
+```
+
+## 查询 JSON 数据
+
+### 查询整个 JSON 字段
+
+检索整个 `profile` 字段内容的查询。
+
+```sql
+SELECT profile FROM user_profiles;
+```
+
+### 查询 JSON 字段的特定元素
+
+使用 `->` 操作符获取 JSON 对象的某个字段值。
+
+```sql
+SELECT profile->'name' AS name FROM user_profiles;
+```
+
+### 查询 JSON 字段内嵌套的元素
+
+使用 `->` 和 `->>` 操作符查询嵌套的 JSON 对象。
+
+```sql
+SELECT profile->'address'->>'city' AS city FROM user_profiles WHERE profile->'address' IS NOT NULL;
+```
+
+### 根据 JSON 字段的内容进行筛选
+
+根据 JSON 字段内容筛选记录的示例。
+
+```sql
+SELECT * FROM user_profiles
+WHERE profile->'interests' ? '游泳';
+```
+
+### 更新 JSON 字段
+
+更新 JSON 字段，例如添加一个新的兴趣爱好。
+
+```sql
+UPDATE user_profiles
+SET profile = jsonb_set(profile, '{interests}', profile->'interests' || '"旅行"')
+WHERE id = 1;
+```
+
+## 注意事项
+
+- 示例操作假设您已经具备一定的 SQL 知识。
+- 实际应用中通常会优先使用 `jsonb` 类型，因为它提供了更多功能并且性能更优。
+- 根据实际情况，您可能需要调整查询和更新 JSON 数据的方法。
