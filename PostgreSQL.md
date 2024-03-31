@@ -227,9 +227,136 @@ UPDATE user_profiles
 SET profile = jsonb_set(profile, '{interests}', profile->'interests' || '"旅行"')
 WHERE id = 1;
 ```
+# Python 连接 PostgreSQL 操作手册
 
-## 注意事项
+本手册提供了使用 Python 连接 PostgreSQL 并进行常见数据库操作的示例代码。
 
-- 示例操作假设您已经具备一定的 SQL 知识。
-- 实际应用中通常会优先使用 `jsonb` 类型，因为它提供了更多功能并且性能更优。
-- 根据实际情况，您可能需要调整查询和更新 JSON 数据的方法。
+## 准备工作
+
+确保安装了 `psycopg2` 库。如果尚未安装，请运行以下命令：
+
+```bash
+pip install psycopg2
+```
+
+## 示例代码
+
+### 1. 连接数据库
+
+```python
+import psycopg2
+
+conn = psycopg2.connect(
+    dbname="testdb",
+    user="your_username",
+    password="your_password",
+    host="localhost"
+)
+cur = conn.cursor()
+```
+
+### 2. 创建表
+
+```python
+cur.execute("""
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50),
+    email VARCHAR(50),
+    age INT
+)
+""")
+conn.commit()
+```
+
+### 3. 插入数据
+
+```python
+cur.execute("INSERT INTO users (name, email, age) VALUES (%s, %s, %s)", ("Alice", "alice@example.com", 30))
+conn.commit()
+```
+
+### 4. 查询数据
+
+```python
+cur.execute("SELECT * FROM users")
+rows = cur.fetchall()
+for row in rows:
+    print(row)
+```
+
+### 5. 更新数据
+
+```python
+cur.execute("UPDATE users SET age = %s WHERE name = %s", (31, "Alice"))
+conn.commit()
+```
+
+### 6. 删除数据
+
+```python
+cur.execute("DELETE FROM users WHERE name = %s", ("Alice",))
+conn.commit()
+```
+
+### 7. 批量插入数据
+
+```python
+users = [("Bob", "bob@example.com", 25), ("Charlie", "charlie@example.com", 28)]
+cur.executemany("INSERT INTO users (name, email, age) VALUES (%s, %s, %s)", users)
+conn.commit()
+```
+
+### 8. 查询特定条件的数据
+
+```python
+cur.execute("SELECT * FROM users WHERE age > %s", (26,))
+rows = cur.fetchall()
+for row in rows:
+    print(row)
+```
+
+### 9. 计数查询
+
+```python
+cur.execute("SELECT COUNT(*) FROM users")
+count = cur.fetchone()[0]
+print(f"Total users: {count}")
+```
+
+### 10. 删除表
+
+```python
+cur.execute("DROP TABLE users")
+conn.commit()
+```
+
+### 高级操作
+
+本部分提供了一些高级数据库操作的示例，包括事务处理、批量操作、索引和性能优化等。
+
+### 11. 事务处理
+
+```python
+conn.autocommit = False
+try:
+    cur.execute("INSERT INTO users (name, email, age) VALUES (%s, %s, %s)", ("Daisy", "daisy@example.com", 24))
+    conn.commit()
+except Exception as e:
+    conn.rollback()
+    print(e)
+```
+
+### 12. 批量操作优化
+
+```python
+data = [("Eva", "eva@example.com", 22), ("Frank", "frank@example.com", 29)]
+cur.executemany("INSERT INTO users (name, email, age) VALUES (%s, %s, %s)", data)
+conn.commit()
+```
+
+...
+
+此文件只包含部分代码示例，完整示例请参考上述回答。
+
+
