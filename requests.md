@@ -1,60 +1,59 @@
+# `requests` Common properties and methods of the library
 
-# `requests` 库常用属性和方法
+When using the `requests` library to interact with the API, in addition to using `r.text` to obtain the response content, there are several common properties and methods that can help you better process the response data. The following are some commonly used properties and methods:
 
-在使用 `requests` 库与API进行交互时，除了使用 `r.text` 获取响应内容外，还有几个常用的属性和方法可以帮助你更好地处理响应数据。以下是一些常用的属性和方法：
+## Common properties
 
-## 常用属性
+- **`r.status_code`**: Returns the status code of the HTTP request. Status code 200 means the request was successful, 404 means the resource was not found, 500 means a server error, etc.
 
-- **`r.status_code`**: 返回HTTP请求的状态码。状态码200表示请求成功，404表示未找到资源，500表示服务器错误等。
+- **`r.json()`**: When the response content is in JSON format, you can use this method to parse the content into a Python dictionary. This is a very common situation when handling REST API responses.
 
-- **`r.json()`**: 当响应内容是JSON格式时，可以使用此方法将内容解析为Python字典。这是处理REST API响应时非常常见的一种情况。
+- **`r.headers`**: Return response headers in dictionary form. Can be used to obtain some information such as content type, server information, content length, etc.
 
-- **`r.headers`**: 以字典形式返回响应头。可以用来获取一些如内容类型、服务器信息、内容长度等信息。
+- **`r.content`**: Returns the binary form of the response content. Suitable for downloading binary content such as files or images.
 
-- **`r.content`**: 返回响应内容的二进制形式。适用于下载文件或图片等二进制内容。
+- **`r.url`**: Returns the URL from which the response was obtained, useful for tracking redirects.
 
-- **`r.url`**: 返回获取响应的URL，这对于跟踪重定向很有用。
+- **`r.encoding`**: Get or set the encoding of the response content. If no encoding is specified in the header, `requests` will guess based on its own rules.
 
-- **`r.encoding`**: 获取或设置响应内容的编码。如果header中没有指定编码，`requests`将会根据自己的规则猜测。
+- **`r.cookies`**: Returns a `RequestsCookieJar` that contains all cookies sent by the server. Can be used to send these cookies on subsequent requests.
 
-- **`r.cookies`**: 返回一个`RequestsCookieJar`，它包含了服务器发送的所有cookies。可以用来在后续请求中发送这些cookies。
+- **`r.raise_for_status()`**: This method will throw an exception if the response status code indicates an HTTP error. This is useful to ensure the request is successful.
 
-- **`r.raise_for_status()`**: 如果响应的状态码指示了一个HTTP错误，这个方法会抛出一个异常。这对于确保请求成功非常有用。
+- **`r.history`**: If the request has been redirected, `r.history` will contain a list of `Response` objects, representing each step in the redirection process.
 
-- **`r.history`**: 如果请求经过了重定向，`r.history`会包含`Response`对象的列表，代表了重定向过程中的每一步。
+- **`r.elapsed`**: Returns a `timedelta` object representing the time it took for the request to be sent and the response to be returned.
 
-- **`r.elapsed`**: 返回一个`timedelta`对象，表示请求发送到响应返回所花费的时间。
+- **`r.request`**: Returns a `PreparedRequest` object, which represents the actual request sent. Can be used to debug or inspect the final form of the request, such as viewing the final URL, headers or body.
 
-- **`r.request`**: 返回一个`PreparedRequest`对象，表示的是实际发送的请求。可以用来调试或检查请求的最终形态，如查看最终的URL、headers或body。
+## Usage example
 
-## 使用示例
-
-### 获取JSON响应内容
+### Get JSON response content
 
 ```python
 import requests
 
 response = requests.get('https://api.github.com/events')
 if response.status_code == 200:
-    data = response.json()
-    print(data)
+     data = response.json()
+     print(data)
 else:
-    print("请求失败，状态码：", response.status_code)
+     print("Request failed, status code: ", response.status_code)
 ```
 
-### 处理重定向
+### Handling redirects
 
 ```python
 response = requests.get('http://github.com')
-print("请求的最终URL：", response.url)
-print("重定向历史：", response.history)
+print("Requested final URL:", response.url)
+print("Redirect history:", response.history)
 ```
 
-### 检查响应头
+### Check response headers
 
 ```python
 response = requests.get('https://api.github.com/events')
-print("响应头信息：", response.headers)
+print("Response header information: ", response.headers)
 ```
 
-这些属性和方法让`requests`库在处理HTTP请求时非常灵活和强大。通过它们，你可以获取几乎所有你需要的信息，并以合适的方式处理响应内容。
+These properties and methods make the requests library very flexible and powerful when handling HTTP requests. Through them, you can get almost all the information you need and process the response content in an appropriate way.
