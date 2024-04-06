@@ -1,65 +1,64 @@
-
-# Requests 库错误演示和解释
+# Requests library error demonstration and explanation
 
 ## 1. ConnectionError
 
-当网络连接出现问题时，例如DNS查询失败，拒绝连接等，会抛出此错误。
+This error is thrown when there is a problem with the network connection, such as DNS query failure, connection refused, etc.
 
-### 示例代码
+### Sample code
 
 ```python
 import requests
 try:
-    response = requests.get('http://example.commmmm')  # 故意写错域名以触发错误
+     response = requests.get('http://example.commmmm') # Deliberately write the wrong domain name to trigger an error
 except requests.ConnectionError:
-    print('连接错误，请检查你的网络连接或网址是否正确。')
+     print('Connection error, please check whether your network connection or URL is correct.')
 ```
 
 ## 2. HTTPError
 
-当HTTP请求返回了不成功的状态码，例如404(页面未找到)或500(服务器内部错误)时，会抛出此错误。
+This error is thrown when an HTTP request returns an unsuccessful status code such as 404 (Page Not Found) or 500 (Internal Server Error).
 
-### 示例代码
+### Sample code
 
 ```python
 import requests
 from requests.exceptions import HTTPError
 
-response = requests.get('http://httpbin.org/status/404')  # 访问一个会返回404状态码的网址
+response = requests.get('http://httpbin.org/status/404') # Access a URL that will return a 404 status code
 try:
-    response.raise_for_status()  # 这会抛出HTTPError，因为状态码是404
+     response.raise_for_status() # This will throw an HTTPError because the status code is 404
 except HTTPError:
-    print(f'HTTP错误，状态码： {response.status_code}')
+     print(f'HTTP error, status code: {response.status_code}')
 ```
 
 ## 3. Timeout
 
-当请求超出了设定的时间限制时，会抛出此错误。这可以分为连接超时和读取超时。
+This error is thrown when the request exceeds the set time limit. This can be divided into connection timeout and read timeout.
 
-### 示例代码
+### Sample code
 
 ```python
 import requests
 from requests.exceptions import Timeout
 
 try:
-    response = requests.get('http://httpbin.org/delay/5', timeout=1)  # 设置超时时间小于响应时间
+     response = requests.get('http://httpbin.org/delay/5', timeout=1) # Set the timeout to be less than the response time
 except Timeout:
-    print('请求超时，请检查网络或调整超时设置。')
+     print('The request timed out, please check the network or adjust the timeout setting.')
 ```
 
 ## 4. TooManyRedirects
 
-当请求遇到了过多的重定向时，会抛出此错误。通常是网站配置问题引起的。
+This error is thrown when a request encounters too many redirects. Usually caused by website configuration issues.
 
-### 示例代码
+### Sample code
 
 ```python
 import requests
 from requests.exceptions import TooManyRedirects
 
 try:
-    response = requests.get('http://httpbin.org/redirect/10', allow_redirects=True)  # 请求重定向次数超过最大限制
+     response = requests.get('http://httpbin.org/redirect/10', allow_redirects=True) # The number of request redirects exceeds the maximum limit
 except TooManyRedirects:
-    print('过多重定向，请检查请求的URL。')
+     print('Too many redirects, please check the requested URL.')
 ```
