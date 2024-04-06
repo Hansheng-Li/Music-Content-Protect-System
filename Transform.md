@@ -1,31 +1,30 @@
+# Summary of Python string operations
 
-# Python 字符串操作总结
+Python is very powerful when it comes to handling strings, providing a wealth of methods to perform various string operations. Here are some examples of basic and advanced string manipulation methods:
 
-Python在处理字符串方面非常强大，提供了丰富的方法来执行各种字符串操作。以下是一些基本和高级的字符串操作方法示例：
+## Basic operations
 
-## 基本操作
+1. `split`: Split the string into a list.
+2. `join`: Concatenate the elements in the list into a string.
+3. Specify the number of splits: Specify the number of splits when using `split`.
+4. `rsplit`: Split starting from the right side of the string.
+5. Split lines: Use `splitlines` to split multi-line strings.
+6. `partition`: Split the string into three parts.
+7. `rpartition`: Similar to `partition`, but starts from the right.
+8. `replace`: Replace some parts of the string.
+9. Case conversion: Use `upper`, `lower`, `capitalize`, `title` for case conversion.
+10. Remove whitespace: Use `strip`, `lstrip`, `rstrip` to remove whitespace characters on both sides of the string.
 
-1. `split`: 将字符串分割成列表。
-2. `join`: 将列表中的元素连接成一个字符串。
-3. 分割指定次数: 使用`split`时指定分割次数。
-4. `rsplit`: 从字符串的右侧开始分割。
-5. 分割行: 使用`splitlines`分割多行字符串。
-6. `partition`: 将字符串分割成三部分。
-7. `rpartition`: 类似`partition`，但是从右侧开始。
-8. `replace`: 替换字符串中的某些部分。
-9. 大小写转换: 使用`upper`、`lower`、`capitalize`、`title`进行大小写转换。
-10. 去除空白: 使用`strip`、`lstrip`、`rstrip`去除字符串两侧的空白字符。
+## Advanced operations
 
-## 高级操作
+11. String formatting (`format`): Use the `format` method to insert values into the placeholders of a string.
+12. String prefix and suffix check (`startswith`, `endswith`): Check whether the string starts with a specific prefix or ends with a specific suffix.
+13. Find substring (`find`, `rfind`): Find the first occurrence of a substring.
+14. Character filling (`zfill`): Fill the left side of a numeric string with `0`.
+15. String slicing: The slicing operation can be used to obtain a part of a string.
+16. Reverse strings: Use slicing to reverse strings.
+17. Variants of `strip` (`lstrip`, `rstrip`): Remove whitespace characters (or other characters) on the left or right side of the string.
+18. String iteration: Iterate each character in the string directly in the `for` loop.
+19. String inclusion check (`in`): Check whether a string contains another string.
 
-11. 字符串格式化 (`format`): 使用`format`方法将值插入字符串的占位符中。
-12. 字符串前缀和后缀检查 (`startswith`, `endswith`): 检查字符串是否以特定的前缀开始或以特定的后缀结束。
-13. 找到子字符串 (`find`, `rfind`): 查找子字符串首次出现的位置。
-14. 字符填充 (`zfill`): 为数字字符串的左边填充`0`。
-15. 字符串的切片: 切片操作可以用来获取字符串的一部分。
-16. 反转字符串: 使用切片的方式来实现字符串的反转。
-17. `strip`的变种 (`lstrip`, `rstrip`): 去除字符串左边或右边的空白字符（或其他字符）。
-18. 字符串的迭代: 直接在`for`循环中迭代字符串中的每个字符。
-19. 字符串包含检查 (`in`): 检查一个字符串是否包含另一个字符串。
-
-这些操作构成了处理Python字符串时的基本工具集，能够覆盖大部分的字符串操作需求。
+These operations form the basic toolset for processing Python strings and can cover most string operation needs.
